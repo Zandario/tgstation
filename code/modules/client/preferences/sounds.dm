@@ -88,6 +88,17 @@
 	else
 		client.mob.stop_sound_channel(CHANNEL_LOBBYMUSIC)
 
+/datum/preference/numeric/sound_lobby_volume
+	category = PREFERENCE_CATEGORY_GAME_PREFERENCES
+	savefile_key = "sound_lobby_volume"
+	savefile_identifier = PREFERENCE_PLAYER
+
+	minimum = 0
+	maximum = 100
+
+/datum/preference/numeric/sound_lobby_volume/create_default_value()
+	return maximum
+
 /// Controls hearing admin music
 /datum/preference/toggle/sound_midi
 	category = PREFERENCE_CATEGORY_GAME_PREFERENCES

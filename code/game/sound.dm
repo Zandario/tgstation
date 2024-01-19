@@ -171,12 +171,28 @@
 	S.status = SOUND_UPDATE
 	SEND_SOUND(src, S)
 
+/// Attempts to play the round's title music on the client.
 /client/proc/playtitlemusic(vol = 85)
 	set waitfor = FALSE
 	UNTIL(SSticker.login_music) //wait for SSticker init to set the login music
 
-	if(prefs && (prefs.read_preference(/datum/preference/toggle/sound_lobby)) && !CONFIG_GET(flag/disallow_title_music))
+	if(!CONFIG_GET(flag/disallow_title_music) && prefs)
+		// Lets get our lobby music preferences.
+		var/lobby_music_pref = prefs.read_preference(/datum/preference/toggle/sound_lobby)
+		var/volume_to_play_at = prefs.read_preference(/datum/preference/numeric/sound_lobby_volume)
+
+		// If the volume is at 0, there is no point in playing the music.
+		if(volume_to_play_at == 0 || (lobby_music_pref == FALSE))
+			return
+
+		// Shift the volume by the client's desired amount.
+		vol *= (volume_to_play_at / 100)
+
 		SEND_SOUND(src, sound(SSticker.login_music, repeat = 0, wait = 0, volume = vol, channel = CHANNEL_LOBBYMUSIC)) // MAD JAMS
+
+	// Juuust in case so we know if something goes wrong with prefs.
+	else if(!prefs)
+		stack_trace("Client has no prefs, can't play title music.")
 
 /proc/get_rand_frequency()
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.

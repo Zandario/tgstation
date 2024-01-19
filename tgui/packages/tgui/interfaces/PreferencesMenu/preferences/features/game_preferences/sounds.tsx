@@ -73,6 +73,13 @@ export const sound_lobby: FeatureToggle = {
   component: CheckboxInput,
 };
 
+export const sound_lobby_volume: Feature<number> = {
+  name: 'Lobby music volume',
+  category: 'SOUND',
+  description: 'The volume that the lobby music will play at.',
+  component: FeatureSliderInput,
+};
+
 export const sound_midi: FeatureToggle = {
   name: 'Enable admin music',
   category: 'SOUND',
